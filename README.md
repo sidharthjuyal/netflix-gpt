@@ -1,11 +1,14 @@
 # netflix-gpt
 This is the Movie Recommendation Tool based on user prompt ( with Integrated Authentication )
-- configure Parcel and react
+- configure Parcel and React
 - configure TailwindCSS
-- Header
+- Header Component
 - Routing of App
 - Login Form
 - Form Validation (useref Hook)
+- Firebase Deployment
+- Sign Up/ Sign In User Account
+- Create Redux Store with userSlice
 
 # Igniting Our App
 npm init
@@ -39,8 +42,12 @@ npm install tailwindcss @tailwindcss/postcss
    - Movie Suggestions
 
 # Routing
-npm instal -D react-router ( Dev Dependency )
+npm install react-router
 
 # FireBase Integration
 npm i firebase
 npm install -g firebase-tools (firebase hosting)
+
+# redux Store
+npm i -D @reduxjs/toolkit
+npm i react-redux
