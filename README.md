@@ -9,22 +9,23 @@ This is the Movie Recommendation Tool based on user prompt ( with Integrated Aut
 - Firebase Deployment
 - Sign Up/ Sign In User Account
 - Create Redux Store with userSlice
+- User Authentication Setup
 
 # Igniting Our App
-npm init
-npm install -D parcel  ( dev dependency )
-npm install react
-npm install react-dom
-npx parcel src/index.html 
+- npm init
+- npm install -D parcel  ( dev dependency )
+- npm install react
+- npm install react-dom
+- npx parcel src/index.html 
 
 # If you delete the node_modues
 you can regenerate the node_modules using  ( npm install ), given that you have your package.json and package-lock.json
 
 # Configure Tailwind CSS
-npm install tailwindcss @tailwindcss/postcss
--> create a .postcssrc in the project root and configure it.
--> add  @import "tailwindcss"; to index.css
--> link index.css to index.html
+- npm install tailwindcss @tailwindcss/postcss
+- create a .postcssrc in the project root and configure it.
+- add  @import "tailwindcss"; to index.css
+- link index.css to index.html
 
 # App Features
 - Login / Sign Up 
@@ -42,12 +43,15 @@ npm install tailwindcss @tailwindcss/postcss
    - Movie Suggestions
 
 # Routing
-npm install react-router
+- npm install react-router
 
 # FireBase Integration
-npm i firebase
-npm install -g firebase-tools (firebase hosting)
+- npm i firebase
+- npm install -g firebase-tools (firebase hosting)
+- firebase login
+- firebase init
+- firebase deploy
 
 # redux Store
-npm i -D @reduxjs/toolkit
-npm i react-redux
+- npm i @reduxjs/toolkit
+- npm i react-redux
