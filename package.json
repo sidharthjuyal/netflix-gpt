@@ -1,0 +1,35 @@
+{
+  "name": "netflix-gpt",
+  "version": "1.0.0",
+  "description": "This is a movie recommendation tool integrated with authentication.",
+  "scripts": {
+    "test": "jest",
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidharthjuyal/netflix-gpt.git"
+  },
+  "author": "Sidharth Juyal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sidharthjuyal/netflix-gpt/issues"
+  },
+  "homepage": "https://github.com/sidharthjuyal/netflix-gpt#readme",
+  "devDependencies": {
+    "parcel": "^2.15.2",
+    "react-router": "^7.6.2"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.10",
+    "node": "^24.2.0",
+    "npm": "^11.4.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.10"
+  },
+  "browsersList": [
+    "last 2 versions"
+  ]
+}
