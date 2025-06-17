@@ -3,7 +3,9 @@ This is the Movie Recommendation Tool based on user prompt ( with Integrated Aut
 - configure Parcel and react
 - configure TailwindCSS
 - Header
+- Routing of App
 - Login Form
+- Form Validation (useref Hook)
 
 # Igniting Our App
 npm init
@@ -38,3 +40,7 @@ npm install tailwindcss @tailwindcss/postcss
 
 # Routing
 npm instal -D react-router ( Dev Dependency )
+
+# FireBase Integration
+npm i firebase
+npm install -g firebase-tools (firebase hosting)
