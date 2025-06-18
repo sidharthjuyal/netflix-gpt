@@ -1,5 +1,5 @@
 # netflix-gpt
-This is the Movie Recommendation Tool based on user prompt ( with Integrated Authentication )
+This is a Movie Recommendation Tool based on user prompt ( with Integrated Authentication )
 - configure Parcel and React
 - configure TailwindCSS
 - Header Component
@@ -8,8 +8,15 @@ This is the Movie Recommendation Tool based on user prompt ( with Integrated Aut
 - Form Validation (useref Hook)
 - Firebase Deployment
 - Sign Up/ Sign In User Account
-- Create Redux Store with userSlice
+- Create Redux Store with userSlice / moviesSlice
 - User Authentication Setup
+- unsubscribed to OnAuthStateChanged
+- added hardcoded Values to constants.js
+- Register for TMDB API and got Access Token
+- API call to Now Playing Movies
+- Browsing Main Container (Video API)
+- Updation of store with movies and video ID
+- Embedded Youtube Video
 
 # Igniting Our App
 - npm init

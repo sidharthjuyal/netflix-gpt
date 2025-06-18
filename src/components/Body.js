@@ -15,7 +15,7 @@ const Body = () => {
   ]);
 
   return (
-    <div>
+    <div className="select-none">
       <RouterProvider router={appRouter} />
     </div>
   );
