@@ -2,8 +2,11 @@ export const LOGO = "https://help.nflxext.com/helpcenter/OneTrust/oneTrust_produ
 
 export const USER_AVATAR = "https://occ-0-3646-3647.1.nflxso.net/dnm/api/v6/vN7bi_My87NPKvsBoib006Llxzg/AAAABTZ2zlLdBVC05fsd2YQAR43J6vB1NAUBOOrxt7oaFATxMhtdzlNZ846H3D8TZzooe2-FT853YVYs8p001KVFYopWi4D4NXM.png?r=229";
 
+export const IMG_CDN_URL ="https://image.tmdb.org/t/p/original";
+
 export const API_OPTIONS = {
   method: 'GET',
+  api_key: "5c317d906657cc2d5885a8d0c8f38d1a",
   headers: {
     accept: 'application/json',
     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YzMxN2Q5MDY2NTdjYzJkNTg4NWE4ZDBjOGYzOGQxYSIsIm5iZiI6MTc1MDIzMjUzMS41NzUsInN1YiI6IjY4NTI2ZGQzNWU0MTgxNWFkZTkyZTIyOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JGSOcvngRySFsJ_vsbH8xwdG97JaiDLIL8EBhwwwRv8'

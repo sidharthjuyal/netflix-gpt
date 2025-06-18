@@ -17,6 +17,8 @@ This is a Movie Recommendation Tool based on user prompt ( with Integrated Authe
 - Browsing Main Container (Video API)
 - Updation of store with movies and video ID
 - Embedded Youtube Video
+- Browsing Secondary Component
+- Movie Lists / UI Fixes
 
 # Igniting Our App
 - npm init

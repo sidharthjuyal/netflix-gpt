@@ -87,15 +87,16 @@ const Login = () => {
   return (
     <div className="select-none">
       <Header />
-      <div className="absolute">
+      <div className="absolute w-full h-full bg-cover bg-center">
         <img
           alt="background image"
           src="https://assets.nflxext.com/ffe/siteui/vlv3/7968847f-3da9-44b3-8bbb-13a46579881f/web/IN-en-20250609-TRIFECTA-perspective_32b70b51-20d4-46db-8a1a-3d5428be5f0e_large.jpg"
+          className="w-full h-full object-cover"
         />
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="w-3/12 absolute p-12 bg-[rgba(0,0,0,0.9)] my-36 mx-auto right-0 left-0 text-white rounded-md"
+        className="max-[500px]:w-2/3 xl:w-3/12 lg:w-4/12 md:w-1/2 sm:w-1/2 w-1/2 absolute p-12 bg-[rgba(0,0,0,0.9)] my-36 mx-auto right-0 left-0 text-white rounded-md"
       >
         <h1 className="font-bold text-3xl py-4">
           {isSignInForm ? "Sign In" : "Sign Up"}
