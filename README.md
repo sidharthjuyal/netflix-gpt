@@ -19,6 +19,7 @@ This is a Movie Recommendation Tool based on user prompt ( with Integrated Authe
 - Embedded Youtube Video
 - Browsing Secondary Component
 - Movie Lists / UI Fixes
+- GPT Search Bar
 
 # Igniting Our App
 - npm init

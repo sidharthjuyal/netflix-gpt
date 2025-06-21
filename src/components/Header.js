@@ -8,11 +8,18 @@ import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { LOGO } from "../utils/constants";
+import { toggleSearchBar } from "../utils/gptSlice";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
+  const buttonTitleFlag = useSelector((store) => store.gpt.searchBarToggleFlag);
+
+  const handleGPTSearchClick = () => {
+    // Toggle GPT
+    dispatch(toggleSearchBar());
+  }
 
   const handleSignOut = () => {
     signOut(auth)
@@ -57,6 +64,12 @@ const Header = () => {
       />
       {user && (
         <div className="flex justify-center items-center p-2">
+          <button
+            onClick={handleGPTSearchClick}
+            className="rounded-sm cursor-pointer m-2 p-2 bg-white text-black text-xs"
+          >
+          {(buttonTitleFlag ? "GPT Search" : "Get Movies")}
+          </button>
           <img className="w-8 h-8" alt="user icon" src={user?.photoURL} />
           <button
             onClick={handleSignOut}
