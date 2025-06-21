@@ -9,17 +9,23 @@ import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { LOGO } from "../utils/constants";
 import { toggleSearchBar } from "../utils/gptSlice";
+import { changeLanguage } from "../utils/configSlice";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
-  const buttonTitleFlag = useSelector((store) => store.gpt.searchBarToggleFlag);
+  const showGPTSearch = useSelector((store) => store.gpt.searchBarToggleFlag);
 
   const handleGPTSearchClick = () => {
     // Toggle GPT
     dispatch(toggleSearchBar());
-  }
+  };
+
+  const handleLanguageChange = (e) => {
+    // Toggle GPT
+    dispatch(changeLanguage(e.target.value));
+  };
 
   const handleSignOut = () => {
     signOut(auth)
@@ -50,25 +56,26 @@ const Header = () => {
         navigate("/");
       }
     });
-    
+
     // unsunscribe when component unmounts
     return () => unsubscribe();
   }, []);
 
   return (
     <div className="flex justify-between absolute px-8 py-2 bg-gradient-to-b from-black z-10 w-full">
-      <img
-        className="w-40"
-        alt="logo"
-        src={LOGO}
-      />
+      <img className="w-40" alt="logo" src={LOGO} />
       {user && (
         <div className="flex justify-center items-center p-2">
+          {showGPTSearch && <select onChange={handleLanguageChange} className="bg-white border-0 outline-0 rounded-sm text-xs m-2 p-2">
+            <option value="english">English</option>
+            <option value="hindi">Hindi</option>
+            <option value="spanish">Spanish</option>
+          </select>}
           <button
             onClick={handleGPTSearchClick}
             className="rounded-sm cursor-pointer m-2 p-2 bg-white text-black text-xs"
           >
-          {(buttonTitleFlag ? "GPT Search" : "Get Movies")}
+            {showGPTSearch ? "Get Movies" : "GPT Search"}
           </button>
           <img className="w-8 h-8" alt="user icon" src={user?.photoURL} />
           <button

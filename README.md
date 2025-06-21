@@ -20,6 +20,8 @@ This is a Movie Recommendation Tool based on user prompt ( with Integrated Authe
 - Browsing Secondary Component
 - Movie Lists / UI Fixes
 - GPT Search Bar
+- Muli Language feature through user selection
+
 
 # Igniting Our App
 - npm init
