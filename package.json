@@ -35,6 +35,15 @@
     "react-router": "^7.6.2",
     "tailwindcss": "^4.1.10"
   },
+  "targets": {
+    "default": {
+      "includeNodeModules": true,
+      "distDir": "dist",
+      "sourceMap": false,
+      "publicUrl": "./",
+      "context": "browser"
+    }
+  },
   "browsersList": [
     "last 2 versions"
   ]
