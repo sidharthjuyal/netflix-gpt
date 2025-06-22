@@ -8,9 +8,13 @@ const useUpcomingMovies = () => {
   const upcomingMovies = useSelector((state) => state.movies.upcomingMovies);
   const getUpcomingMovies = async () => {
     const data = await fetch(
-      "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1&",
+      "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
       API_OPTIONS
     );
+    if (!data.ok) {
+      console.error(`TMDB Fetch Error: ${data.status} - ${data.statusText}`);
+      return; // stop here
+    }
     const json = await data.json();
     dispatch(addUpcomingMovies(json));
   };
