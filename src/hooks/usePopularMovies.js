@@ -5,19 +5,31 @@ import { addPopularMovies } from "../utils/moviesSlice";
 
 const usePopularMovies = () => {
   const dispatch = useDispatch();
-  const popularMovies = useSelector(store => store.movies.popularMovies);
+  const popularMovies = useSelector((store) => store.movies.popularMovies);
 
   const getPopularMovies = async () => {
-    const data = await fetch(
-      "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
-      API_OPTIONS
-    );
-    const json = await data.json();
-    dispatch(addPopularMovies(json));
+    try {
+      const res = await fetch(
+        "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
+        API_OPTIONS
+      );
+
+      if (!res.ok) {
+        console.error(
+          `Failed to fetch popular movies: ${res.status} ${res.statusText}`
+        );
+        return;
+      }
+
+      const json = await res.json();
+      dispatch(addPopularMovies(json));
+    } catch (error) {
+      console.error("Error fetching popular movies:", error);
+    }
   };
 
   useEffect(() => {
-    !popularMovies && getPopularMovies();
+    if (!popularMovies) getPopularMovies();
   }, [popularMovies]);
 };
 

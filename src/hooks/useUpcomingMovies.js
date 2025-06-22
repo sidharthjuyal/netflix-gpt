@@ -6,21 +6,30 @@ import { addUpcomingMovies } from "../utils/moviesSlice";
 const useUpcomingMovies = () => {
   const dispatch = useDispatch();
   const upcomingMovies = useSelector((state) => state.movies.upcomingMovies);
+
   const getUpcomingMovies = async () => {
-    const data = await fetch(
-      "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
-      API_OPTIONS
-    );
-    if (!data.ok) {
-      console.error(`TMDB Fetch Error: ${data.status} - ${data.statusText}`);
-      return; // stop here
+    try {
+      const res = await fetch(
+        "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
+        API_OPTIONS
+      );
+
+      if (!res.ok) {
+        console.error(
+          `Failed to fetch upcoming movies: ${res.status} ${res.statusText}`
+        );
+        return;
+      }
+
+      const json = await res.json();
+      dispatch(addUpcomingMovies(json));
+    } catch (error) {
+      console.error("Error fetching upcoming movies:", error);
     }
-    const json = await data.json();
-    dispatch(addUpcomingMovies(json));
   };
 
   useEffect(() => {
-    !upcomingMovies && getUpcomingMovies();
+    if (!upcomingMovies) getUpcomingMovies();
   }, [upcomingMovies]);
 };
 
