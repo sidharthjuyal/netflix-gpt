@@ -3,16 +3,21 @@ import Browse from "./Browse";
 import { createBrowserRouter, RouterProvider } from "react-router";
 
 const Body = () => {
-  const appRouter = createBrowserRouter([
+  const appRouter = createBrowserRouter(
+    [
+      {
+        path: "/",
+        element: <Login />,
+      },
+      {
+        path: "/browse",
+        element: <Browse />,
+      },
+    ],
     {
-      path: "/",
-      element: <Login />,
-    },
-    {
-      path: "/browse",
-      element: <Browse />,
-    },
-  ]);
+      basename: "/netflix-gpt",
+    }
+  );
 
   return (
     <div className="select-none">
