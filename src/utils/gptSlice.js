@@ -11,7 +11,7 @@ const gptSlice = createSlice({
             state.searchBarToggleFlag = !state.searchBarToggleFlag;
         },
         addGptMovieResult: (state, action) => {
-            state.gptMovies = action.paylod
+            state.gptMovies = action.payload
         },
     }
 })

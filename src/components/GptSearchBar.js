@@ -30,10 +30,11 @@ const GptSearchBar = () => {
       ],
       model: "llama3-8b-8192",
     });
-    const gptMovies = chatCompletion.choices?.[0]?.message?.content.split(",");
-
+    const gptMovies = chatCompletion.choices?.[0]?.message?.content.split(", ");
+    console.log(gptMovies);
     const promiseArray = gptMovies.map((movie) => searchMovieTmdb(movie));
     const tmdbResults = await Promise.all(promiseArray);
+    console.log(tmdbResults);
     dispatch(addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults}));
   };
   return (

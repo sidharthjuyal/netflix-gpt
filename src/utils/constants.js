@@ -6,14 +6,10 @@ export const BG_URL = "https://assets.nflxext.com/ffe/siteui/vlv3/7968847f-3da9-
 
 export const IMG_CDN_URL ="https://image.tmdb.org/t/p/original";
 
-export const API_KEY = "5c317d906657cc2d5885a8d0c8f38d1a";
-
-export const OPENAI_KEY = "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";
-
 export const API_OPTIONS = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YzMxN2Q5MDY2NTdjYzJkNTg4NWE4ZDBjOGYzOGQxYSIsIm5iZiI6MTc1MDIzMjUzMS41NzUsInN1YiI6IjY4NTI2ZGQzNWU0MTgxNWFkZTkyZTIyOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JGSOcvngRySFsJ_vsbH8xwdG97JaiDLIL8EBhwwwRv8'
+    Authorization: 'Bearer ' + process.env.REACT_APP_TMDB_KEY,
   }
 };

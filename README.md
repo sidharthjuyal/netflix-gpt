@@ -21,7 +21,8 @@ This is a Movie Recommendation Tool based on user prompt ( with Integrated Authe
 - Movie Lists / UI Fixes
 - GPT Search Bar
 - Muli Language feature through user selection
-- Configure Open AI 
+- Configure Groq-sdk AI 
+- Implemented Movie Recommendation Functionality
 
 # Igniting Our App
 - npm init
