@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import lang from "../utils/languageConstants";
 import { useDispatch, useSelector } from "react-redux";
 import openai from "../utils/openai";
-import { API_OPTIONS } from "../utils/constants";
 import { addGptMovieResult } from "../utils/gptSlice";
 
 const GptSearchBar = () => {
@@ -27,7 +26,9 @@ const GptSearchBar = () => {
     if (!searchText.current.value) return;
 
     try {
-      setIsLoading(true); // ✅ Start loading
+      setIsLoading(true);
+
+      await new Promise((res) => setTimeout(res, 800)); 
 
       const chatCompletion = await openai.chat.completions.create({
         messages: [
@@ -54,7 +55,7 @@ const GptSearchBar = () => {
     } catch (error) {
       console.error("GPT or TMDB fetch failed:", error);
     } finally {
-      setIsLoading(false); // ✅ Done loading
+      setIsLoading(false);
     }
   };
 
