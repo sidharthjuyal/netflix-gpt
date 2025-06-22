@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import lang from "../utils/languageConstants";
 import { useDispatch, useSelector } from "react-redux";
 import openai from "../utils/openai";
@@ -9,32 +9,54 @@ const GptSearchBar = () => {
   const dispatch = useDispatch();
   const languageKey = useSelector((store) => store.config.lang);
   const searchText = useRef(null);
-  
-  // search movie in TMDB
+  const [isLoading, setIsLoading] = useState(false); // ✅ Track loading state
+
   const searchMovieTmdb = async (movie) => {
-    const data = await fetch('https://api.themoviedb.org/3/search/movie?query=' + movie + '&include_adult=false&language=en-US&page=1', API_OPTIONS);
+    const data = await fetch(
+      "https://api.themoviedb.org/3/search/movie?query=" +
+        movie +
+        "&include_adult=false&language=en-US&page=1",
+      API_OPTIONS
+    );
     const json = await data.json();
     return json?.results;
-  }
+  };
 
   const handleGptSearchClick = async () => {
-    const chatCompletion = await openai.chat.completions.create({
-      messages: [
-        {
-          role: "user",
-          content:
-            "Act as a Movie Recommendation system and suggest some movies for the query: " +
-            searchText.current.value +
-            ". Only give me 5 movies - commas separated (and don't type anything else) like the example given ahead. Example: Gadar, Sholay, Rush Hour, The Dark Knight, The Shawshank Redemption.",
-        },
-      ],
-      model: "llama3-8b-8192",
-    });
-    const gptMovies = chatCompletion.choices?.[0]?.message?.content.split(", ");
-    const promiseArray = gptMovies.map((movie) => searchMovieTmdb(movie));
-    const tmdbResults = await Promise.all(promiseArray);
-    dispatch(addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults}));
+    if (!searchText.current.value) return;
+
+    try {
+      setIsLoading(true); // ✅ Start loading
+
+      const chatCompletion = await openai.chat.completions.create({
+        messages: [
+          {
+            role: "user",
+            content:
+              "Act as a Movie Recommendation system and suggest some movies for the query: " +
+              searchText.current.value +
+              ". Only give me 5 movies - commas separated (and don't type anything else) like the example given ahead. Example: Gadar, Sholay, Rush Hour, The Dark Knight, The Shawshank Redemption.",
+          },
+        ],
+        model: "llama3-8b-8192",
+      });
+
+      const gptMovies =
+        chatCompletion.choices?.[0]?.message?.content.split(", ") || [];
+
+      const promiseArray = gptMovies.map((movie) => searchMovieTmdb(movie));
+      const tmdbResults = await Promise.all(promiseArray);
+
+      dispatch(
+        addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults })
+      );
+    } catch (error) {
+      console.error("GPT or TMDB fetch failed:", error);
+    } finally {
+      setIsLoading(false); // ✅ Done loading
+    }
   };
+
   return (
     <div className="w-full flex justify-center items-end h-64 md:h-60 bg-gradient-to-b from-black">
       <form
@@ -49,9 +71,14 @@ const GptSearchBar = () => {
         />
         <button
           onClick={handleGptSearchClick}
-          className="w-1/6 md:w-1/5 p-2 m-2 md:m-4 bg-red-700 text-white rounded-sm hover:cursor-pointer text-sm"
+          disabled={isLoading}
+          className={`w-1/6 md:w-1/5 p-2 m-2 md:m-4 text-white rounded-sm text-sm ${
+            isLoading
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-red-700 hover:cursor-pointer"
+          }`}
         >
-          {lang[languageKey]?.search}
+          {isLoading ? "Loading..." : lang[languageKey]?.search}
         </button>
       </form>
     </div>
