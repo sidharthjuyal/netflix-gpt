@@ -33,7 +33,7 @@ This is a Movie Recommendation Tool based on user prompt ( with Integrated Authe
 - npx parcel src/index.html 
 
 # If you delete the node_modues
-you can regenerate the node_modules using  ( npm install ), given that you have your package.json and package-lock.json
+you can regenerate the node_modules using  ( npm install ), given that you have your package.json.
 
 # Configure Tailwind CSS
 - npm install tailwindcss @tailwindcss/postcss
