@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUpcomingMovies } from "../utils/moviesSlice";
 
-const useUpcomingMovies = () => {
+const useUpcomingMovies = (shouldFetch = true) => {
   const dispatch = useDispatch();
   const upcomingMovies = useSelector((state) => state.movies.upcomingMovies);
 
@@ -16,7 +16,7 @@ const useUpcomingMovies = () => {
 
       if (!res.ok) {
         console.error(
-          `Failed to fetch upcoming movies: ${res.status} ${res.statusText}`
+          `❌ Failed to fetch upcoming movies: ${res.status} ${res.statusText}`
         );
         return;
       }
@@ -24,13 +24,15 @@ const useUpcomingMovies = () => {
       const json = await res.json();
       dispatch(addUpcomingMovies(json));
     } catch (error) {
-      console.error("Error fetching upcoming movies:", error);
+      console.error("❌ Error fetching upcoming movies:", error);
     }
   };
 
   useEffect(() => {
-    if (!upcomingMovies) getUpcomingMovies();
-  }, [upcomingMovies]);
+    if (shouldFetch && !upcomingMovies) {
+      getUpcomingMovies();
+    }
+  }, [shouldFetch, upcomingMovies]);
 };
 
 export default useUpcomingMovies;

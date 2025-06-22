@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPopularMovies } from "../utils/moviesSlice";
 
-const usePopularMovies = () => {
+const usePopularMovies = (shouldFetch = true) => {
   const dispatch = useDispatch();
   const popularMovies = useSelector((store) => store.movies.popularMovies);
 
@@ -16,7 +16,7 @@ const usePopularMovies = () => {
 
       if (!res.ok) {
         console.error(
-          `Failed to fetch popular movies: ${res.status} ${res.statusText}`
+          `❌ Failed to fetch popular movies: ${res.status} ${res.statusText}`
         );
         return;
       }
@@ -24,13 +24,15 @@ const usePopularMovies = () => {
       const json = await res.json();
       dispatch(addPopularMovies(json));
     } catch (error) {
-      console.error("Error fetching popular movies:", error);
+      console.error("❌ Error fetching popular movies:", error);
     }
   };
 
   useEffect(() => {
-    if (!popularMovies) getPopularMovies();
-  }, [popularMovies]);
+    if (shouldFetch && !popularMovies) {
+      getPopularMovies();
+    }
+  }, [shouldFetch, popularMovies]);
 };
 
 export default usePopularMovies;

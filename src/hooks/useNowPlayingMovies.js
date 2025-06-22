@@ -3,9 +3,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNowPlayingMovies } from "../utils/moviesSlice";
 
-const useNowPlayingMovies = () => {
+const useNowPlayingMovies = (shouldFetch = true) => {
   const dispatch = useDispatch();
-  const nowPlayingMovies = useSelector((store) => store.movies.nowPlayingMovies);
+  const nowPlayingMovies = useSelector(
+    (store) => store.movies.nowPlayingMovies
+  );
 
   const getNowPlayingMovies = async () => {
     try {
@@ -16,7 +18,7 @@ const useNowPlayingMovies = () => {
 
       if (!res.ok) {
         console.error(
-          `Failed to fetch now playing movies: ${res.status} ${res.statusText}`
+          `❌ Failed to fetch now playing movies: ${res.status} ${res.statusText}`
         );
         return;
       }
@@ -24,13 +26,15 @@ const useNowPlayingMovies = () => {
       const json = await res.json();
       dispatch(addNowPlayingMovies(json));
     } catch (error) {
-      console.error("Error fetching now playing movies:", error);
+      console.error("❌ Error fetching now playing movies:", error);
     }
   };
 
   useEffect(() => {
-    if (!nowPlayingMovies) getNowPlayingMovies();
-  }, [nowPlayingMovies]);
+    if (shouldFetch && !nowPlayingMovies) {
+      getNowPlayingMovies();
+    }
+  }, [shouldFetch, nowPlayingMovies]);
 };
 
 export default useNowPlayingMovies;

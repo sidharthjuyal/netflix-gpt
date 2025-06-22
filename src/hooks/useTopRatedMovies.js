@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addTopRatedMovies } from "../utils/moviesSlice";
 
-const useTopRatedMovies = () => {
+const useTopRatedMovies = (shouldFetch = true) => {
   const dispatch = useDispatch();
   const topRatedMovies = useSelector((store) => store.movies.topRatedMovies);
 
@@ -16,7 +16,7 @@ const useTopRatedMovies = () => {
 
       if (!res.ok) {
         console.error(
-          `Failed to fetch top rated movies: ${res.status} ${res.statusText}`
+          `❌ Failed to fetch top rated movies: ${res.status} ${res.statusText}`
         );
         return;
       }
@@ -24,13 +24,15 @@ const useTopRatedMovies = () => {
       const json = await res.json();
       dispatch(addTopRatedMovies(json));
     } catch (error) {
-      console.error("Error fetching top rated movies:", error);
+      console.error("❌ Error fetching top rated movies:", error);
     }
   };
 
   useEffect(() => {
-    if (!topRatedMovies) getTopRatedMovies();
-  }, [topRatedMovies]);
+    if (shouldFetch && !topRatedMovies) {
+      getTopRatedMovies();
+    }
+  }, [shouldFetch, topRatedMovies]);
 };
 
 export default useTopRatedMovies;
