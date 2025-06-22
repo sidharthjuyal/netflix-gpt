@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest",
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html"
+    "build": "cp src/_redirects dist/_redirects && parcel build src/index.html"
   },
   "repository": {
     "type": "git",
