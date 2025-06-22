@@ -67,12 +67,12 @@ const GptSearchBar = () => {
           ref={searchText}
           type="text"
           placeholder={lang[languageKey]?.gptSearchPlaceholder}
-          className="w-5/6 md:w-4/5 p-2 m-2 md:m-4 bg-white text-sm rounded-sm"
+          className="w-9/12 md:w-4/5 p-2 m-2 md:m-4 bg-white text-sm rounded-sm"
         />
         <button
           onClick={handleGptSearchClick}
           disabled={isLoading}
-          className={`w-1/6 md:w-1/5 p-2 m-2 md:m-4 text-white rounded-sm text-sm ${
+          className={`w-3/12 md:w-1/5 p-2 m-2 md:m-4 text-white rounded-sm text-sm ${
             isLoading
               ? "bg-gray-500 cursor-not-allowed"
               : "bg-red-700 hover:cursor-pointer"
