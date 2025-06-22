@@ -12,7 +12,7 @@ import {
 } from "../utils/moviesSlice";
 import { useEffect, useState } from "react";
 
-// ✅ Centralized retry with short delay
+// ✅ Centralized retry with forceful reload
 const fetchWithRetry = async (url, retries = 3, delay = 500) => {
   for (let i = 0; i < retries; i++) {
     try {
@@ -24,7 +24,11 @@ const fetchWithRetry = async (url, retries = 3, delay = 500) => {
       await new Promise((res) => setTimeout(res, delay));
     }
   }
-  throw new Error("❌ All retry attempts failed due to network or CORS error.");
+
+  // 💣 Always reload if fetch fails even after all retries
+  console.error("❌ All retry attempts failed. Reloading page...");
+  setTimeout(() => window.location.reload(), 1000);
+  throw new Error("❌ Fetch failed, forcing page reload.");
 };
 
 const Browse = () => {
@@ -37,14 +41,12 @@ const Browse = () => {
   const upcoming = useSelector((store) => store.movies.upcomingMovies);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [fetchError, setFetchError] = useState(null);
 
   const isDataReady = nowPlaying && popular && topRated && upcoming;
 
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
-      setFetchError(null);
       try {
         const key = process.env.REACT_APP_TMDB_API_KEY;
         const urls = [
@@ -63,7 +65,7 @@ const Browse = () => {
         dispatch(addTopRatedMovies(top));
         dispatch(addUpcomingMovies(up));
       } catch (err) {
-        setFetchError(err.message);
+        // Silent fail – reload is already in progress
       } finally {
         setIsLoading(false);
       }
@@ -83,21 +85,8 @@ const Browse = () => {
               src={BG_URL}
             />
           </div>
-
-          <div className="backdrop-blur-sm rounded-sm absolute top-1/2 left-1/2 text-white p-3 bg-[rgba(0,0,0,0.8)] text-center">
-            {fetchError ? (
-              <>
-                <div>❌ {fetchError}</div>
-                <button
-                  className="mt-2 bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
-                  onClick={() => window.location.reload()}
-                >
-                  Retry / Refresh Page
-                </button>
-              </>
-            ) : (
-              "Loading..."
-            )}
+          <div className="backdrop-blur-sm rounded-sm absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white p-3 bg-[rgba(0,0,0,0.8)]">
+            Loading...
           </div>
         </div>
       </div>
