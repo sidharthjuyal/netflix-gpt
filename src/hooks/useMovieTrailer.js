@@ -10,12 +10,13 @@ const useMovieTrailer = (movieId, shouldFetch = true) => {
   const getMovieVideo = async () => {
     try {
       const res = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`,
-        API_OPTIONS
+        `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
       );
 
       if (!res.ok) {
-        console.error(`❌ Failed to fetch trailer: ${res.status} ${res.statusText}`);
+        console.error(
+          `❌ Failed to fetch trailer: ${res.status} ${res.statusText}`
+        );
         return;
       }
 
