@@ -5,9 +5,7 @@
   "scripts": {
     "test": "jest",
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html --public-url ./",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "build": "parcel build src/index.html"
   },
   "repository": {
     "type": "git",
@@ -18,10 +16,8 @@
   "bugs": {
     "url": "https://github.com/sidharthjuyal/netflix-gpt/issues"
   },
-  "homepage": "https://github.com/sidharthjuyal/netflix-gpt",
   "devDependencies": {
     "buffer": "^6.0.3",
-    "gh-pages": "^6.3.0",
     "parcel": "^2.15.2",
     "process": "^0.11.10"
   },
