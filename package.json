@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest",
     "start": "parcel src/index.html",
-    "build": "cp src/_redirects dist/_redirects && parcel build src/index.html"
+    "build": "shx mkdir -p dist && shx cp src/_redirects dist/_redirects && parcel build src/index.html"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,8 @@
   "devDependencies": {
     "buffer": "^6.0.3",
     "parcel": "^2.15.2",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "shx": "^0.4.0"
   },
   "dependencies": {
     "@parcel/core": "^2.15.2",
