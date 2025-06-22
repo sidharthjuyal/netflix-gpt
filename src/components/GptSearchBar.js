@@ -11,15 +11,34 @@ const GptSearchBar = () => {
   const [isLoading, setIsLoading] = useState(false); // ✅ Track loading state
 
   const searchMovieTmdb = async (movie) => {
-    const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
-      movie
-    )}&include_adult=false&language=en-US&page=1&api_key=${
-      process.env.REACT_APP_TMDB_API_KEY
-    }`;
+    const key = process.env.REACT_APP_TMDB_API_KEY;
+    const baseUrl = `https://api.themoviedb.org/3/search/movie`;
 
-    const res = await fetch(url);
-    const json = await res.json();
-    return json?.results;
+    const url = `${baseUrl}?query=${encodeURIComponent(
+      movie
+    )}&include_adult=false&language=en-US&page=1&api_key=${key}`;
+
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Primary TMDB fetch failed");
+      const json = await res.json();
+      return json?.results || [];
+    } catch (err1) {
+      console.warn(
+        `❌ Primary fetch failed for "${movie}", trying fallback...`
+      );
+
+      // 🔁 Try fallback once
+      try {
+        const res = await fetch(url); // fire again
+        if (!res.ok) throw new Error("Fallback TMDB fetch also failed");
+        const json = await res.json();
+        return json?.results || [];
+      } catch (err2) {
+        console.error(`❌ Fallback fetch failed for "${movie}":`, err2);
+        return [];
+      }
+    }
   };
 
   const handleGptSearchClick = async () => {
@@ -28,7 +47,7 @@ const GptSearchBar = () => {
     try {
       setIsLoading(true);
 
-      await new Promise((res) => setTimeout(res, 800)); 
+      await new Promise((res) => setTimeout(res, 800));
 
       const chatCompletion = await openai.chat.completions.create({
         messages: [
