@@ -21,7 +21,7 @@ This is a Movie Recommendation Tool based on user prompt ( with Integrated Authe
 - Movie Lists / UI Fixes
 - GPT Search Bar
 - Muli Language feature through user selection
-
+- Configure Open AI 
 
 # Igniting Our App
 - npm init

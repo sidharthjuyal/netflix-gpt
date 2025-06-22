@@ -8,6 +8,8 @@ export const IMG_CDN_URL ="https://image.tmdb.org/t/p/original";
 
 export const API_KEY = "5c317d906657cc2d5885a8d0c8f38d1a";
 
+export const OPENAI_KEY = "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";
+
 export const API_OPTIONS = {
   method: 'GET',
   headers: {
