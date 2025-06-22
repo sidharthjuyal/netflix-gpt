@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const gptSlice = createSlice({
     name: "gpt",
     initialState: {
-        searchBarToggleFlag: false,
+        searchBarToggleFlag: true,
         gptMovies: null
     },
     reducers: {

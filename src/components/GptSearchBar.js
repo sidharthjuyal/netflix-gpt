@@ -31,27 +31,25 @@ const GptSearchBar = () => {
       model: "llama3-8b-8192",
     });
     const gptMovies = chatCompletion.choices?.[0]?.message?.content.split(", ");
-    console.log(gptMovies);
     const promiseArray = gptMovies.map((movie) => searchMovieTmdb(movie));
     const tmdbResults = await Promise.all(promiseArray);
-    console.log(tmdbResults);
     dispatch(addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults}));
   };
   return (
-    <div className="w-full flex justify-center items-center h-60 bg-gradient-to-b from-black">
+    <div className="w-full flex justify-center items-end h-64 md:h-60 bg-gradient-to-b from-black">
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="w-1/2 flex justify-center p-6 m-6"
+        className="w-full md:w-1/2 flex justify-center p-6 m-6"
       >
         <input
           ref={searchText}
           type="text"
           placeholder={lang[languageKey]?.gptSearchPlaceholder}
-          className="w-4/5 p-2 m-4 bg-white text-sm"
+          className="w-5/6 md:w-4/5 p-2 m-2 md:m-4 bg-white text-sm rounded-sm"
         />
         <button
           onClick={handleGptSearchClick}
-          className="w-1/5 p-2 m-4 bg-red-700 text-white rounded-lg hover:cursor-pointer text-sm"
+          className="w-1/6 md:w-1/5 p-2 m-2 md:m-4 bg-red-700 text-white rounded-sm hover:cursor-pointer text-sm"
         >
           {lang[languageKey]?.search}
         </button>

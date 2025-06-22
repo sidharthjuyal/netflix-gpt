@@ -14,7 +14,7 @@ const GptMovieSuggestion = () => {
     return null;
 
   return (
-    <div className="m-4 mt-0 p-4 bg-[rgba(0,0,0,0.85)] text-white">
+    <div className="backdrop-blur-sm bg-[rgba(0,0,0,0.85)] rounded-xl shadow-lg ml-4 mr-8 mb-4 mt-0 p-4 text-white">
       {gptData.movieNames.map((name, index) => (
           <MovieList key={name} title={name} movies={gptData.movieResults[index]} />
       ))}
