@@ -23,6 +23,7 @@ This is a Movie Recommendation Tool based on user prompt ( with Integrated Authe
 - Muli Language feature through user selection
 - Configure Groq-sdk AI 
 - Implemented Movie Recommendation Functionality
+- Responsiveness
 
 # Igniting Our App
 - npm init

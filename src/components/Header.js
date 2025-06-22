@@ -62,10 +62,10 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row md:justify-between absolute px-8 py-2 bg-gradient-to-b from-black z-10 w-full">
+    <div className="flex flex-col md:flex-row md:justify-between absolute px-4 md:px-8 py-2 bg-gradient-to-b from-black z-10 w-full">
       <img className="w-40  mx-auto md:mx-0" alt="logo" src={LOGO} />
       {user && (
-        <div className="flex justify-center items-center p-2">
+        <div className="flex justify-center items-center p-0 md:p-2">
           {showGPTSearch && <select onChange={handleLanguageChange} className="bg-white border-0 outline-0 rounded-sm text-xs m-2 p-2">
             <option value="english">English</option>
             <option value="hindi">Hindi</option>
