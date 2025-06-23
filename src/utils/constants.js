@@ -9,4 +9,6 @@ export const BG_URL =
 
 export const IMG_CDN_URL = "https://image.tmdb.org/t/p/original";
 
+export const SVG_URL = "http://www.w3.org/2000/svg";
+
 export const API_OPTIONS = {};

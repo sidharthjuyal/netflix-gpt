@@ -24,6 +24,7 @@ This is a Movie Recommendation Tool based on user prompt ( with Integrated Authe
 - Configure Groq-sdk AI 
 - Implemented Movie Recommendation Functionality
 - Responsiveness
+- Video Modals Added
 
 # Igniting Our App
 - npm init

@@ -11,6 +11,7 @@ import {
   addUpcomingMovies,
 } from "../utils/moviesSlice";
 import { useEffect, useState } from "react";
+import TrailerModal from "./TrailerModal";
 
 // ✅ Centralized retry with forceful reload
 const fetchWithRetry = async (url, retries = 3, delay = 500) => {
@@ -34,6 +35,7 @@ const fetchWithRetry = async (url, retries = 3, delay = 500) => {
 const Browse = () => {
   const dispatch = useDispatch();
   const showGptSearch = useSelector((store) => store.gpt.searchBarToggleFlag);
+  const trailerModal = useSelector((store) => store.trailerModal);
 
   const nowPlaying = useSelector((store) => store.movies.nowPlayingMovies);
   const popular = useSelector((store) => store.movies.popularMovies);
@@ -96,6 +98,12 @@ const Browse = () => {
   return (
     <div>
       <Header />
+      {trailerModal.isOpen && (
+          <TrailerModal
+            movieId={trailerModal.movieId}
+            movieName={trailerModal.movieName}
+          />
+        )}
       {showGptSearch ? (
         <GptSearch />
       ) : (
