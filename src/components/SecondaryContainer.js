@@ -1,15 +1,7 @@
-import usePopularMovies from "../hooks/usePopularMovies";
-import useTopRatedMovies from "../hooks/useTopRatedMovies";
-import useUpcomingMovies from "../hooks/useUpcomingMovies";
 import { useSelector } from "react-redux";
 import MovieList from "./MovieList";
 
 const SecondaryContainer = () => {
-  
-  usePopularMovies();
-  useTopRatedMovies();
-  useUpcomingMovies();
-
   const movies = useSelector((store) => store.movies);
   return (
     movies.nowPlayingMovies && (
