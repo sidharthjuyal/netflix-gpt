@@ -58,13 +58,13 @@ const Browse = () => {
           movieName={trailerModal.movieName}
         />
       )}
-      {showGptSearch ? (
-        <GptSearch />
-      ) : (
+      {!showGptSearch ? (
         <>
           <MainContainer />
           <SecondaryContainer />
         </>
+      ) : (
+        <GptSearch />
       )}
     </div>
   );
