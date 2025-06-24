@@ -1,5 +1,5 @@
 # Project Hosting ( Netlify )
-https://groqmovierecommendationsystem.netlify.app
+[https://groqmovierecommendationsystem.netlify.app](https://groqmovierecommendationsystem.netlify.app){:target="_blank" rel="noopener"}
 
 # netflix-gpt
 This is a Movie Recommendation Tool based on user prompt ( with Integrated Authentication )
