@@ -4,20 +4,19 @@ import SecondaryContainer from "./SecondaryContainer";
 import GptSearch from "./GptSearch";
 import TrailerModal from "./TrailerModal";
 import { useSelector } from "react-redux";
-import useNowPlayingMovies from "../hooks/useNowPlayingMovies";
-import usePopularMovies from "../hooks/usePopularMovies";
-import useTopRatedMovies from "../hooks/useTopRatedMovies";
-import useUpcomingMovies from "../hooks/useUpcomingMovies";
+import { useEffect } from "react";
 
 const Browse = () => {
   const showGptSearch = useSelector((store) => store.gpt.searchBarToggleFlag);
   const trailerModal = useSelector((store) => store.trailerModal);
 
-  useNowPlayingMovies(!showGptSearch);
-  usePopularMovies(!showGptSearch);
-  useTopRatedMovies(!showGptSearch);
-  useUpcomingMovies(!showGptSearch);
-
+  useEffect(() => {
+    if (!sessionStorage.getItem("reloadedOnce")) {
+      sessionStorage.setItem("reloadedOnce", "true");
+      window.location.href = window.location.href;
+    }
+  }, []);
+  
   return (
     <div>
       <Header />
