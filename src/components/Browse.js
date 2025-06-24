@@ -1,6 +1,6 @@
 import Header from "./Header";
-const MainContainer = lazy(() => import("./MainContainer"));
-const SecondaryContainer = lazy(() => import("./SecondaryContainer"));
+import MainContainer from "./MainContainer";
+import SecondaryContainer from "./SecondaryContainer";
 import GptSearch from "./GptSearch";
 import { useSelector, useDispatch } from "react-redux";
 import { BG_URL } from "../utils/constants";
@@ -10,7 +10,7 @@ import {
   addTopRatedMovies,
   addUpcomingMovies,
 } from "../utils/moviesSlice";
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState } from "react";
 import TrailerModal from "./TrailerModal";
 
 // Retry wrapper with reload fallback
@@ -129,16 +129,8 @@ const Browse = () => {
         <GptSearch />
       ) : (
         <>
-          <Suspense
-            fallback={
-              <div className="text-white text-center mt-8">
-                Loading content...
-              </div>
-            }
-          >
-            <MainContainer />
-            <SecondaryContainer />
-          </Suspense>
+          <MainContainer />
+          <SecondaryContainer />
         </>
       )}
     </div>
