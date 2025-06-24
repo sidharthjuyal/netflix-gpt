@@ -11,7 +11,7 @@ const GptSearchBar = () => {
   const [isLoading, setIsLoading] = useState(false); // ✅ Track loading state
 
   const searchMovieTmdb = async (movie) => {
-    const key = import.meta.env.TMDB_API_KEY;
+    const key = import.meta.env.VITE_TMDB_API_KEY;
     const baseUrl = `https://api.themoviedb.org/3/search/movie`;
 
     const url = `${baseUrl}?query=${encodeURIComponent(
