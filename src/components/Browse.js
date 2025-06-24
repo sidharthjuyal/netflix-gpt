@@ -13,7 +13,16 @@ import {
 import { useEffect, useState } from "react";
 import TrailerModal from "./TrailerModal";
 
-// Retry wrapper with reload fallback
+const safeReload = () => {
+  try {
+    console.log("🔁 Reloading the page...");
+    window.location.reload(true); // Hard reload attempt
+  } catch {
+    window.location.href = window.location.href; // Fallback
+  }
+};
+
+// Retry wrapper with smart reload logic
 const fetchWithRetry = async (url, retries = 3, delay = 500) => {
   for (let i = 0; i < retries; i++) {
     try {
@@ -26,14 +35,32 @@ const fetchWithRetry = async (url, retries = 3, delay = 500) => {
     }
   }
 
-  throw new Error("Fetch failed after all retries");
+  let hasFailedBefore = false;
+  try {
+    hasFailedBefore = localStorage.getItem("netflixFetchFailedOnce");
+  } catch (e) {
+    console.warn("⚠️ localStorage not available");
+  }
+
+  if (!hasFailedBefore) {
+    try {
+      localStorage.setItem("netflixFetchFailedOnce", "true");
+    } catch (e) {
+      console.warn("⚠️ Failed to set localStorage flag");
+    }
+
+    console.error("❌ All retries failed. Forcing reload...");
+    setTimeout(safeReload, 1500);
+  }
+
+  throw new Error("❌ Fetch failed after all retries.");
 };
 
 const Browse = () => {
   const dispatch = useDispatch();
-
   const showGptSearch = useSelector((store) => store.gpt.searchBarToggleFlag);
   const trailerModal = useSelector((store) => store.trailerModal);
+
   const nowPlaying = useSelector((store) => store.movies.nowPlayingMovies);
   const popular = useSelector((store) => store.movies.popularMovies);
   const topRated = useSelector((store) => store.movies.topRatedMovies);
@@ -70,6 +97,13 @@ const Browse = () => {
         dispatch(addPopularMovies(pop));
         dispatch(addTopRatedMovies(top));
         dispatch(addUpcomingMovies(up));
+
+        // ✅ Clear the fail flag after success
+        try {
+          localStorage.removeItem("netflixFetchFailedOnce");
+        } catch (e) {
+          console.warn("⚠️ Failed to clear localStorage flag");
+        }
       } catch (err) {
         console.error("Error fetching movies:", err.message);
         setHasError(true);
@@ -81,7 +115,7 @@ const Browse = () => {
     fetchMovies();
   }, [dispatch]);
 
-  // Error fallback
+  // ❌ Error fallback UI
   if (hasError) {
     return (
       <div className="w-full h-screen flex justify-center items-center bg-black text-white text-center p-4">
@@ -89,14 +123,14 @@ const Browse = () => {
           <h2 className="text-xl font-bold mb-2">⚠️ Network Issue</h2>
           <p className="text-sm">
             Something went wrong while loading movies. Please check your
-            internet connection and try refreshing the page.
+            internet connection and try refreshing the page manually.
           </p>
         </div>
       </div>
     );
   }
 
-  // Loading screen
+  // ⏳ Loading Screen
   if (isLoading || !isDataReady) {
     return (
       <div className="w-full h-full flex justify-center items-center text-black text-xl p-4">
@@ -116,6 +150,7 @@ const Browse = () => {
     );
   }
 
+  // ✅ Actual Content
   return (
     <div>
       <Header />
