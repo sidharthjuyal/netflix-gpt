@@ -1,3 +1,6 @@
+# Project Hosting ( Netlify )
+https://groqmovierecommendationsystem.netlify.app
+
 # netflix-gpt
 This is a Movie Recommendation Tool based on user prompt ( with Integrated Authentication )
 - configure Parcel and React
@@ -25,6 +28,7 @@ This is a Movie Recommendation Tool based on user prompt ( with Integrated Authe
 - Implemented Movie Recommendation Functionality
 - Responsiveness
 - Video Modals Added
+- Implemented loaders for modal fetch
 
 # Igniting Our App
 - npm init
@@ -62,10 +66,6 @@ you can regenerate the node_modules using  ( npm install ), given that you have 
 
 # FireBase Integration
 - npm i firebase
-- npm install -g firebase-tools (firebase hosting)
-- firebase login
-- firebase init
-- firebase deploy
 
 # redux Store
 - npm i @reduxjs/toolkit
