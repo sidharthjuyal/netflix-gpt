@@ -9,6 +9,7 @@ const MovieCard = ({ movie }) => {
     dispatch(openTrailerModal({ movieName: movie.title, movieId: movie.id }));
   };
   if (!poster_path) return null;
+  const imageSize = window.innerWidth <= 768 ? "w342" : "w500";
   return (
     <div
       onClick={handleMovieClick}
@@ -17,7 +18,8 @@ const MovieCard = ({ movie }) => {
       <img
         className="h-40 md:h-52 rounded-md"
         alt="movie name"
-        src={IMG_CDN_URL + poster_path}
+        loading="lazy"
+        src={IMG_CDN_URL + imageSize + poster_path}
       />
     </div>
   );

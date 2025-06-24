@@ -1,6 +1,6 @@
 import Header from "./Header";
-import MainContainer from "./MainContainer";
-import SecondaryContainer from "./SecondaryContainer";
+const MainContainer = lazy(() => import("./MainContainer"));
+const SecondaryContainer = lazy(() => import("./SecondaryContainer"));
 import GptSearch from "./GptSearch";
 import { useSelector, useDispatch } from "react-redux";
 import { BG_URL } from "../utils/constants";
@@ -10,10 +10,10 @@ import {
   addTopRatedMovies,
   addUpcomingMovies,
 } from "../utils/moviesSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import TrailerModal from "./TrailerModal";
 
-// ✅ Centralized retry with forceful reload
+// Retry wrapper with reload fallback
 const fetchWithRetry = async (url, retries = 3, delay = 500) => {
   for (let i = 0; i < retries; i++) {
     try {
@@ -26,30 +26,34 @@ const fetchWithRetry = async (url, retries = 3, delay = 500) => {
     }
   }
 
-  // 💣 Always reload if fetch fails even after all retries
-  console.error("❌ All retry attempts failed. Reloading page...");
-  setTimeout(() => window.location.reload(), 1000);
-  throw new Error("❌ Fetch failed, forcing page reload.");
+  throw new Error("Fetch failed after all retries");
 };
 
 const Browse = () => {
   const dispatch = useDispatch();
+
   const showGptSearch = useSelector((store) => store.gpt.searchBarToggleFlag);
   const trailerModal = useSelector((store) => store.trailerModal);
-
   const nowPlaying = useSelector((store) => store.movies.nowPlayingMovies);
   const popular = useSelector((store) => store.movies.popularMovies);
   const topRated = useSelector((store) => store.movies.topRatedMovies);
   const upcoming = useSelector((store) => store.movies.upcomingMovies);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
-  const isDataReady = nowPlaying && popular && topRated && upcoming;
+  const isDataReady =
+    nowPlaying?.results &&
+    popular?.results &&
+    topRated?.results &&
+    upcoming?.results;
 
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
       try {
+        if (!navigator.onLine) throw new Error("Offline");
+
         const key = process.env.REACT_APP_TMDB_API_KEY;
         const urls = [
           `https://api.themoviedb.org/3/movie/now_playing?api_key=${key}&language=en-US&page=1`,
@@ -67,7 +71,8 @@ const Browse = () => {
         dispatch(addTopRatedMovies(top));
         dispatch(addUpcomingMovies(up));
       } catch (err) {
-        // Silent fail – reload is already in progress
+        console.error("Error fetching movies:", err.message);
+        setHasError(true);
       } finally {
         setIsLoading(false);
       }
@@ -76,6 +81,22 @@ const Browse = () => {
     fetchMovies();
   }, [dispatch]);
 
+  // Error fallback
+  if (hasError) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center bg-black text-white text-center p-4">
+        <div className="max-w-md bg-red-800/60 p-4 rounded-xl backdrop-blur">
+          <h2 className="text-xl font-bold mb-2">⚠️ Network Issue</h2>
+          <p className="text-sm">
+            Something went wrong while loading movies. Please check your
+            internet connection and try refreshing the page.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Loading screen
   if (isLoading || !isDataReady) {
     return (
       <div className="w-full h-full flex justify-center items-center text-black text-xl p-4">
@@ -99,17 +120,25 @@ const Browse = () => {
     <div>
       <Header />
       {trailerModal.isOpen && (
-          <TrailerModal
-            movieId={trailerModal.movieId}
-            movieName={trailerModal.movieName}
-          />
-        )}
+        <TrailerModal
+          movieId={trailerModal.movieId}
+          movieName={trailerModal.movieName}
+        />
+      )}
       {showGptSearch ? (
         <GptSearch />
       ) : (
         <>
-          <MainContainer />
-          <SecondaryContainer />
+          <Suspense
+            fallback={
+              <div className="text-white text-center mt-8">
+                Loading content...
+              </div>
+            }
+          >
+            <MainContainer />
+            <SecondaryContainer />
+          </Suspense>
         </>
       )}
     </div>
