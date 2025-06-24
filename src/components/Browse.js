@@ -24,6 +24,8 @@ const safeReload = () => {
 
 // Retry wrapper with smart reload logic
 const fetchWithRetry = async (url, retries = 3, delay = 500) => {
+  const hasFailedBefore = localStorage.getItem("netflixFetchFailedOnce");
+
   for (let i = 0; i < retries; i++) {
     try {
       const res = await fetch(url);
@@ -35,25 +37,21 @@ const fetchWithRetry = async (url, retries = 3, delay = 500) => {
     }
   }
 
-  let hasFailedBefore = false;
-  try {
-    hasFailedBefore = localStorage.getItem("netflixFetchFailedOnce");
-  } catch (e) {
-    console.warn("⚠️ localStorage not available");
-  }
-
   if (!hasFailedBefore) {
-    try {
-      localStorage.setItem("netflixFetchFailedOnce", "true");
-    } catch (e) {
-      console.warn("⚠️ Failed to set localStorage flag");
-    }
-
-    console.error("❌ All retries failed. Forcing reload...");
-    setTimeout(safeReload, 1500);
+    localStorage.setItem("netflixFetchFailedOnce", "true");
+    console.error("❌ First total failure. Reloading...");
+    setTimeout(() => {
+      try {
+        window.location.reload(true);
+      } catch {
+        window.location.href = window.location.href;
+      }
+    }, 1000);
+    throw new Error("Reloading after first fail.");
   }
 
-  throw new Error("❌ Fetch failed after all retries.");
+  // On second fail (flag was already set)
+  throw new Error("Fetch failed after retry AND reload.");
 };
 
 const Browse = () => {
