@@ -2,7 +2,7 @@
 import Groq from "groq-sdk";
 
 const openai = new Groq({
-  apiKey: process.env.REACT_APP_OPENAI_KEY,
+  apiKey: import.meta.env.OPENAI_KEY,
   dangerouslyAllowBrowser: true
 });
 
