@@ -65,7 +65,7 @@ const Browse = () => {
       try {
         if (!navigator.onLine) throw new Error("Offline");
 
-        const key = import.meta.env.VITE_TMDB_API_KEY;
+        const key = process.env.TMDB_API_KEY;
         const urls = [
           `https://api.themoviedb.org/3/movie/now_playing?api_key=${key}&language=en-US&page=1`,
           `https://api.themoviedb.org/3/movie/popular?api_key=${key}&language=en-US&page=1`,

@@ -40,7 +40,7 @@ const useFetchAllMovies = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const key = import.meta.env._VITE_TMDB_API_KEY;
+        const key = process.env._TMDB_API_KEY;
         const urls = [
           [`https://api.themoviedb.org/3/movie/now_playing?api_key=${key}&language=en-US&page=1`, addNowPlayingMovies],
           [`https://api.themoviedb.org/3/movie/popular?api_key=${key}&language=en-US&page=1`, addPopularMovies],

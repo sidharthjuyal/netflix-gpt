@@ -1,17 +1,21 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import lang from "../utils/languageConstants";
 import { useDispatch, useSelector } from "react-redux";
 import openai from "../utils/openai";
 import { addGptMovieResult } from "../utils/gptSlice";
 
 const GptSearchBar = () => {
+  useEffect(() => {
+    console.log("🔍 OPENAI_KEY in GptSearchBar:", process.env.OPENAI_KEY);
+    console.log("🔍 process OPENAI_KEY in GptSearchBar:", process.env.OPENAI_KEY);
+  }, []);
   const dispatch = useDispatch();
   const languageKey = useSelector((store) => store.config.lang);
   const searchText = useRef(null);
   const [isLoading, setIsLoading] = useState(false); // ✅ Track loading state
 
   const searchMovieTmdb = async (movie) => {
-    const key = import.meta.env.VITE_TMDB_API_KEY;
+    const key = process.env.TMDB_API_KEY;
     const baseUrl = `https://api.themoviedb.org/3/search/movie`;
 
     const url = `${baseUrl}?query=${encodeURIComponent(
