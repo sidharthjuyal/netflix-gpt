@@ -13,19 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import TrailerModal from "./TrailerModal";
 
-const safeReload = () => {
-  try {
-    console.log("🔁 Reloading the page...");
-    window.location.reload(true); // Hard reload attempt
-  } catch {
-    window.location.href = window.location.href; // Fallback
-  }
-};
-
-// Retry wrapper with smart reload logic
 const fetchWithRetry = async (url, retries = 3, delay = 500) => {
-  const hasFailedBefore = localStorage.getItem("netflixFetchFailedOnce");
-
   for (let i = 0; i < retries; i++) {
     try {
       const res = await fetch(url);
@@ -37,28 +25,25 @@ const fetchWithRetry = async (url, retries = 3, delay = 500) => {
     }
   }
 
-  if (!hasFailedBefore) {
-    localStorage.setItem("netflixFetchFailedOnce", "true");
-    console.error("❌ First total failure. Reloading...");
+  const hasReloaded = sessionStorage.getItem("hasReloadedOnce");
+
+  if (!hasReloaded) {
+    sessionStorage.setItem("hasReloadedOnce", "true");
+    console.warn("❌ First fail: triggering reload...");
     setTimeout(() => {
-      try {
-        window.location.reload(true);
-      } catch {
-        window.location.href = window.location.href;
-      }
+      window.location.reload(true);
     }, 1000);
     throw new Error("Reloading after first fail.");
   }
 
-  // On second fail (flag was already set)
-  throw new Error("Fetch failed after retry AND reload.");
+  // Second fail after reload
+  throw new Error("❌ Second fetch fail – showing error screen.");
 };
 
 const Browse = () => {
   const dispatch = useDispatch();
   const showGptSearch = useSelector((store) => store.gpt.searchBarToggleFlag);
   const trailerModal = useSelector((store) => store.trailerModal);
-
   const nowPlaying = useSelector((store) => store.movies.nowPlayingMovies);
   const popular = useSelector((store) => store.movies.popularMovies);
   const topRated = useSelector((store) => store.movies.topRatedMovies);
@@ -96,12 +81,8 @@ const Browse = () => {
         dispatch(addTopRatedMovies(top));
         dispatch(addUpcomingMovies(up));
 
-        // ✅ Clear the fail flag after success
-        try {
-          localStorage.removeItem("netflixFetchFailedOnce");
-        } catch (e) {
-          console.warn("⚠️ Failed to clear localStorage flag");
-        }
+        // ✅ Clear the reload flag if everything worked
+        sessionStorage.removeItem("hasReloadedOnce");
       } catch (err) {
         console.error("Error fetching movies:", err.message);
         setHasError(true);
@@ -113,22 +94,20 @@ const Browse = () => {
     fetchMovies();
   }, [dispatch]);
 
-  // ❌ Error fallback UI
   if (hasError) {
     return (
       <div className="w-full h-screen flex justify-center items-center bg-black text-white text-center p-4">
         <div className="max-w-md bg-red-800/60 p-4 rounded-xl backdrop-blur">
           <h2 className="text-xl font-bold mb-2">⚠️ Network Issue</h2>
           <p className="text-sm">
-            Something went wrong while loading movies. Please check your
-            internet connection and try refreshing the page manually.
+            We tried reloading the page, but it still didn't work. Please check
+            your internet and try manually refreshing.
           </p>
         </div>
       </div>
     );
   }
 
-  // ⏳ Loading Screen
   if (isLoading || !isDataReady) {
     return (
       <div className="w-full h-full flex justify-center items-center text-black text-xl p-4">
@@ -148,7 +127,6 @@ const Browse = () => {
     );
   }
 
-  // ✅ Actual Content
   return (
     <div>
       <Header />
