@@ -14,11 +14,7 @@ const Browse = () => {
   const trailerModal = useSelector((store) => store.trailerModal);
   const showGptSearch = useSelector((store) => store.gpt.searchBarToggleFlag);
 
-  // always call all hooks
   const nowPlayingStatus = useNowPlayingMovies(); // returns "loading", "success", or "error"
-  usePopularMovies(nowPlayingStatus === "success");
-  useTopRatedMovies(nowPlayingStatus === "success");
-  useUpcomingMovies(nowPlayingStatus === "success");
 
   if (nowPlayingStatus === "loading") {
     return (
