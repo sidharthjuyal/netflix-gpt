@@ -4,40 +4,53 @@ import { useDispatch, useSelector } from "react-redux";
 import openai from "../utils/openai";
 import { addGptMovieResult } from "../utils/gptSlice";
 
+// Reusable fetch with retry + reload logic
+const fetchWithRetry = async (url, retries = 3, delay = 500) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      if (!navigator.onLine) throw new Error("Offline");
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } catch (err) {
+      console.warn(`Retry ${i + 1} failed:`, err.message);
+      await new Promise((res) => setTimeout(res, delay));
+    }
+  }
+
+  const hasReloaded = sessionStorage.getItem("searchReloadedOnce");
+  if (!hasReloaded) {
+    sessionStorage.setItem("searchReloadedOnce", "true");
+    console.warn("🔁 Reloading due to GPT search fetch failure...");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+    throw new Error("Reloading after failed GPT fetch.");
+  }
+
+  throw new Error("❌ Final GPT fetch failure.");
+};
+
 const GptSearchBar = () => {
   const dispatch = useDispatch();
   const languageKey = useSelector((store) => store.config.lang);
   const searchText = useRef(null);
-  const [isLoading, setIsLoading] = useState(false); // ✅ Track loading state
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchError, setSearchError] = useState(false);
 
   const searchMovieTmdb = async (movie) => {
     const key = process.env.REACT_APP_TMDB_API_KEY;
     const baseUrl = `https://api.themoviedb.org/3/search/movie`;
-
     const url = `${baseUrl}?query=${encodeURIComponent(
       movie
     )}&include_adult=false&language=en-US&page=1&api_key=${key}`;
 
     try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Primary TMDB fetch failed");
-      const json = await res.json();
+      const json = await fetchWithRetry(url);
       return json?.results || [];
-    } catch (err1) {
-      console.warn(
-        `❌ Primary fetch failed for "${movie}", trying fallback...`
-      );
-
-      // 🔁 Try fallback once
-      try {
-        const res = await fetch(url); // fire again
-        if (!res.ok) throw new Error("Fallback TMDB fetch also failed");
-        const json = await res.json();
-        return json?.results || [];
-      } catch (err2) {
-        console.error(`❌ Fallback fetch failed for "${movie}":`, err2);
-        return [];
-      }
+    } catch (err) {
+      console.error(`❌ Final failure for movie: "${movie}"`);
+      return [];
     }
   };
 
@@ -46,6 +59,7 @@ const GptSearchBar = () => {
 
     try {
       setIsLoading(true);
+      setSearchError(false);
 
       await new Promise((res) => setTimeout(res, 800));
 
@@ -68,32 +82,39 @@ const GptSearchBar = () => {
       const promiseArray = gptMovies.map((movie) => searchMovieTmdb(movie));
       const tmdbResults = await Promise.all(promiseArray);
 
+      const allEmpty = tmdbResults.every((res) => res.length === 0);
+      if (allEmpty) throw new Error("All TMDB searches returned empty");
+
       dispatch(
-        addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults })
+        addGptMovieResult({
+          movieNames: gptMovies,
+          movieResults: tmdbResults,
+        })
       );
     } catch (error) {
-      console.error("GPT or TMDB fetch failed:", error);
+      console.error("GPT Search failed completely:", error);
+      setSearchError(true);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="w-full flex justify-center items-end h-64 md:h-60 bg-gradient-to-b from-black">
+    <div className="w-full flex flex-col justify-center items-center h-64 md:h-60 bg-gradient-to-b from-black text-white">
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="w-full md:w-1/2 flex justify-center px-3 mx-3 py-6 my-6 md:p-6 md:m-6"
+        className="w-full md:w-1/2 flex justify-center px-3 mx-3 py-6 md:p-6"
       >
         <input
           ref={searchText}
           type="text"
           placeholder={lang[languageKey]?.gptSearchPlaceholder}
-          className="w-9/12 md:w-4/5 p-2 m-2 md:m-4 bg-white text-sm rounded-sm"
+          className="w-9/12 md:w-4/5 p-2 m-2 md:m-4 bg-white text-black text-sm rounded-sm"
         />
         <button
           onClick={handleGptSearchClick}
           disabled={isLoading}
-          className={`w-3/12 md:w-1/5 p-2 m-2 md:m-4 text-white rounded-sm text-sm ${
+          className={`w-3/12 md:w-1/5 p-2 m-2 md:m-4 rounded-sm text-sm ${
             isLoading
               ? "bg-gray-500 cursor-not-allowed"
               : "bg-red-700 hover:cursor-pointer"
@@ -102,6 +123,12 @@ const GptSearchBar = () => {
           {isLoading ? "Loading..." : lang[languageKey]?.search}
         </button>
       </form>
+
+      {searchError && (
+        <div className="text-center text-xs text-red-300">
+          ⚠️ Could not fetch movies. Please check your network and try again.
+        </div>
+      )}
     </div>
   );
 };
