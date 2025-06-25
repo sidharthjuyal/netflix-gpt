@@ -116,7 +116,7 @@ const Browse = () => {
           movieName={trailerModal.movieName}
         />
       )}
-      {!showGptSearch ? (
+      {showGptSearch ? (
         <GptSearch />
       ) : (
         <>
