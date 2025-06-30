@@ -56,7 +56,7 @@ you can regenerate the node_modules using  ( npm install ), given that you have 
      - Trailer in Background
      - Tile  Description
      - MovieSuggestions
-     - MovieLists * N
+     - MovieLists * n
 - NetflixGPT
    - Search Bar
    - Movie Suggestions
