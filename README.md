@@ -28,7 +28,7 @@ This is a Movie Recommendation Tool based on user prompt ( with Integrated Authe
 - Implemented Movie Recommendation Functionality
 - Responsiveness
 - Video Modals Added
-- Implemented loaders for modal fetch
+- Implemented loaders for modal fetch.
 
 # Igniting Our App
 - npm init
